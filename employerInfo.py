@@ -48,47 +48,52 @@ class AddDataIntoCsvFile:
 
 
 
-
 class DeleteEmployee(AddDataIntoCsvFile):
-    def DeleteEmployee(self):
+    def DeleteEmploye(self):
         userId = input("Enter userId to delete: ")
+        print(type(userId))
+        rows_to_keep = []
 
-        with open('employees.csv', 'r', newline='') as csvfile, open('temp.csv', 'w', newline='') as tempcsv:
-            fieldnames = ['Employee_ID', 'Name', 'PhoneNubr', 'Role', 'Address']
-            reader = csv.DictReader(csvfile, fieldnames=fieldnames)
-            writer = csv.DictWriter(tempcsv, fieldnames=fieldnames)
-
+        with open('employees.csv', 'r') as csvfile:
+            reader = csv.reader(csvfile)
             for row in reader:
-                if row['Employee_ID'] != userId:
-                    writer.writerow(row)
+                employee_id = row[0]
+                
 
-                    print("Employee Not Found")
+                if employee_id != userId:
+                    rows_to_keep.append(row)
 
-                else:
-                    print("Employee deleted successfully.")
+        with open('employees.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(rows_to_keep)
+            print("Employee with userId", userId, "deleted successfully.")
+                        
+                    
+class updataUser(AddDataIntoCsvFile):
+     def updateData(self):
+        userId = input("Enter userId to update: ")
+        print(type(userId))
+        updated_data = []
+
+      
+        with open('employees.csv', 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                employee_id = row[0]
+                if employee_id == userId:
+                   
+                    new_name = input("Enter new name: ")
+                    new_phone = input("Enter new phone number: ")
+                    new_role = input("Enter new role: ")
+                    new_address = input("Enter new address: ")
+                    row = [employee_id, new_name, new_phone, new_role, new_address]
+                updated_data.append(row)
 
        
-        os.remove('employees.csv')
-        os.rename('temp.csv', 'employees.csv')
+        with open('employees.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(updated_data)
 
-                 
-            
-
-class updataUser(AddDataIntoCsvFile):
-    def updataData(self):
-        userId = input("Enter userId to Update: ")
-        with open('employees.csv', 'r', newline='') as csvfile, open('temp.csv', 'w', newline='') as tempcsv:
-            fieldnames = ['Employee_ID', 'Name', 'PhoneNubr', 'Role', 'Address']
-            reader = csv.DictReader(csvfile, fieldnames=fieldnames)
-            writer = csv.DictWriter(tempcsv, fieldnames=fieldnames)
-            for row in reader:
-                if row['Employee_ID'] != userId:
-                    writer.writerow(row)
-
-                    print("Employee Not Found")
-
-                else:
-                    
-                    print("Employee Updata successfully.")
+        print("Employee with userId", userId, "updated successfully.")
 
 
